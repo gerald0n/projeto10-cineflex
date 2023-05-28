@@ -33,6 +33,10 @@ const GlobalStyle = createGlobalStyle`
 		&::placeholder{
 			font-style: italic;
 		}
+
+		&:invalid {
+			outline-color: red;
+		}
 		
 	}
 `
