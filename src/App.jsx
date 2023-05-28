@@ -23,8 +23,8 @@ export default function App() {
 
          {/* <HomePage movies = {arrayMovies}/> */}
          {/* <SessionsPage movieID = '11'/> */}
-         <SeatsPage sessionID = '5'/>
-         {/* <SuccessPage /> */}
+         {/* <SeatsPage sessionID = '5'/> */}
+         <SuccessPage sessionID = '5' />
       </>
    )
 }

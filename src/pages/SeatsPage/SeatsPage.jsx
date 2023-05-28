@@ -22,11 +22,11 @@ export default function SeatsPage({ sessionID }) {
 
    const selectSeat = (seat, index) => {
       if (seat.isAvailable) {
-         if (!arrClicked.includes(seat.id)) {
-            setArrClicked([...arrClicked, seat.id])
+         if (!arrClicked.includes(seat.name)) {
+            setArrClicked([...arrClicked, seat.name])
          } else {
             const copyArr = [...arrClicked]
-            copyArr.splice(arrClicked.indexOf(seat.id), 1)
+            copyArr.splice(arrClicked.indexOf(seat.name), 1)
             setArrClicked(copyArr)
          }
       }
@@ -40,8 +40,8 @@ export default function SeatsPage({ sessionID }) {
                seats.map((seat, index) => {
                   return (
                      <SeatItem
-                        key={seat.id}
-                        clicked={arrClicked.includes(seat.id)}
+                        key={seat.name}
+                        clicked={arrClicked.includes(seat.name)}
                         status={seat.isAvailable}
                         onClick={() => selectSeat(seat, index)}
                      >
