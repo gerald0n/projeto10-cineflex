@@ -21,8 +21,8 @@ export default function App() {
       <>
          <NavContainer>CINEFLEX</NavContainer>
 
-         <HomePage movies = {arrayMovies}/>
-         {/* <SessionsPage /> */}
+         {/* <HomePage movies = {arrayMovies}/> */}
+         <SessionsPage movieID = '11'/>
          {/* <SeatsPage /> */}
          {/* <SuccessPage /> */}
       </>
