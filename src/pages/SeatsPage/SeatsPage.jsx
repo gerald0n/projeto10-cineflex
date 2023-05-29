@@ -9,15 +9,11 @@ export default function SeatsPage() {
    const navigate = useNavigate()
    const seatList_URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${sessionID}/seats`
    const [session, setSession] = useState([])
-   const [arrClicked, setArrClicked] = useState([])
+   
+   const [ids, setIds] = useState([])
+   const [username, setUsername] = useState('')
+   const [userCPF, setUserCPF] = useState('')
 
-   const [ticket, setTicket] = useState({
-      ids: [],
-      name: '',
-      cpf: ''
-   })
-
-   const {nameUser, cpfUser} = ticket;
 
    useEffect(() => {
       axios.get(seatList_URL).then((response) => setSession(response.data))
@@ -27,12 +23,12 @@ export default function SeatsPage() {
 
    const selectSeat = (seat) => {
       if (seat.isAvailable) {
-         if (!arrClicked.includes(seat.id)) {
-            setArrClicked([...arrClicked, seat.id])
+         if (!ids.includes(seat.id)) {
+            setIds([...ids, seat.id])
          } else {
-            const copyArr = [...arrClicked]
-            copyArr.splice(arrClicked.indexOf(seat.id), 1)
-            setArrClicked(copyArr)
+            const copyArr = [...ids]
+            copyArr.splice(ids.indexOf(seat.id), 1)
+            setIds(copyArr)
          }
       } else {
          alert('Esse assento não está disponível')
@@ -49,7 +45,7 @@ export default function SeatsPage() {
                      <SeatItem
                         data-test="seat"
                         key={seat.id}
-                        clicked={arrClicked.includes(seat.id)}
+                        clicked={ids.includes(seat.id)}
                         status={seat.isAvailable}
                         onClick={() => selectSeat(seat, index)}
                      >
@@ -77,51 +73,50 @@ export default function SeatsPage() {
             <form
                onSubmit={() => {
                   event.preventDefault()
-                  if (arrClicked.length === 0) {
+                  if (ids.length === 0) {
                      alert('Selecione, no mínimo, 1 assento.')
                   } else {
-                     ticket.ids = arrClicked
-                     setTicket(ticket)
-                     console.log(ticket)
-                     /* axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', ticket)
+                     
+                     axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', {
+                        ids: ids,
+                        name: username,
+                        cpf: userCPF
+                     })
                      .then(response => {
                         if(response.status === 200) {
+                           let ticket = {
+                              ids: ids,
+                              name: username,
+                              cpf: userCPF
+                           }
                            navigate('/sucesso', { state: { ticket, sessionID } })
                         }
-                     }) */
-                     
+                     })
                   }
                }}
             >
                <input
-               type='text'
+                  type="text"
                   data-test="client-name"
                   required
                   placeholder="Digite seu nome..."
-                  value={nameUser}
-                  onChange={(e) => {
-                     ticket.name = e.target.value
-                     setTicket(ticket)
-                  }}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                />
                CPF do Comprador:
-              
                <input
-               value={cpfUser}
-                  type='number_format'
+                  value={userCPF}
+                  type="number_format"
                   data-test="client-cpf"
                   required
                   minLength="11"
                   maxLength="11"
                   placeholder="Digite seu CPF..."
-                  onChange={(e) => {
-                     ticket.cpf = e.target.value
-                     setTicket(ticket)
-                  }}
+                  onChange={(e) => {setUserCPF(e.target.value)}}
                />
-               <button 
-               data-test="book-seat-btn"
-               type='submit'>Reservar Assento(s)</button>
+               <button data-test="book-seat-btn" type="submit">
+                  Reservar Assento(s)
+               </button>
             </form>
          </FormContainer>
          <FooterContainer data-test="footer">
