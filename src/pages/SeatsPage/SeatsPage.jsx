@@ -9,25 +9,29 @@ export default function SeatsPage() {
    const navigate = useNavigate()
    const seatList_URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${sessionID}/seats`
    const [session, setSession] = useState([])
-   
+
    const [ids, setIds] = useState([])
    const [username, setUsername] = useState('')
    const [userCPF, setUserCPF] = useState('')
-
+   const [nameSelectedSeats, setNameSelectedSeats] = useState([])
 
    useEffect(() => {
       axios.get(seatList_URL).then((response) => setSession(response.data))
    }, [])
 
-   const { id, name, day, movie, seats } = session
+   const { name, day, movie, seats } = session
 
    const selectSeat = (seat) => {
       if (seat.isAvailable) {
          if (!ids.includes(seat.id)) {
             setIds([...ids, seat.id])
+            setNameSelectedSeats([...nameSelectedSeats, seat.name])
          } else {
             const copyArr = [...ids]
+            const copyArrName = [...nameSelectedSeats]
             copyArr.splice(ids.indexOf(seat.id), 1)
+            copyArrName.splice(nameSelectedSeats.indexOf(seat.name), 1)
+            setNameSelectedSeats(copyArrName)
             setIds(copyArr)
          }
       } else {
@@ -76,22 +80,24 @@ export default function SeatsPage() {
                   if (ids.length === 0) {
                      alert('Selecione, no mínimo, 1 assento.')
                   } else {
-                     
-                     axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', {
-                        ids: ids,
-                        name: username,
-                        cpf: userCPF
-                     })
-                     .then(response => {
-                        if(response.status === 200) {
-                           let ticket = {
-                              ids: ids,
-                              name: username,
-                              cpf: userCPF
+                     axios
+                        .post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', {
+                           ids: ids,
+                           name: username,
+                           cpf: userCPF
+                        })
+                        .then((response) => {
+                           if (response.status === 200) {
+                              let ticket = {
+                                 ids: ids,
+                                 name: username,
+                                 cpf: userCPF
+                              }
+                              navigate('/sucesso', {
+                                 state: { ticket, sessionID, nameSelectedSeats }
+                              })
                            }
-                           navigate('/sucesso', { state: { ticket, sessionID } })
-                        }
-                     })
+                        })
                   }
                }}
             >
@@ -112,7 +118,9 @@ export default function SeatsPage() {
                   minLength="11"
                   maxLength="11"
                   placeholder="Digite seu CPF..."
-                  onChange={(e) => {setUserCPF(e.target.value)}}
+                  onChange={(e) => {
+                     setUserCPF(e.target.value)
+                  }}
                />
                <button data-test="book-seat-btn" type="submit">
                   Reservar Assento(s)

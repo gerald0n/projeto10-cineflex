@@ -5,16 +5,17 @@ import styled from 'styled-components'
 
 export default function SuccessPage() {
    const navigate = useNavigate()
-   const {ticket, sessionID} = useLocation().state;
+   const {ticket, sessionID, nameSelectedSeats} = useLocation().state;
    const [session, setSession] = useState([])
 
    const seatList_URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${sessionID}/seats`
-
+   
    useEffect(() => {
       axios.get(seatList_URL).then((response) => setSession(response.data))
    }, [])
 
-   const { day, movie, name } = session
+   const { day, movie, name, seats } = session
+   
    
    return (
       <PageContainer>
@@ -34,7 +35,7 @@ export default function SuccessPage() {
             <strong>
                <p>Ingressos</p>
             </strong>
-            {ticket.ids.map(seat => <p key={seat}>{`Assento ${seat}`}</p>)}
+            {nameSelectedSeats.map(seat => <p key={seat}>{`Assento ${seat}`}</p>)}
          </TextContainer>
 
          <TextContainer data-test="client-info">
