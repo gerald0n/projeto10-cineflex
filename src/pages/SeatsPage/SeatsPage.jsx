@@ -27,10 +27,12 @@ export default function SeatsPage() {
       if (seat.isAvailable) {
          if (!arrClicked.includes(seat.name)) {
             setArrClicked([...arrClicked, seat.name])
+         
          } else {
             const copyArr = [...arrClicked]
             copyArr.splice(arrClicked.indexOf(seat.name), 1)
             setArrClicked(copyArr)
+            
          }
       } else {
          alert('Esse assento não está disponível')
@@ -71,34 +73,39 @@ export default function SeatsPage() {
          </CaptionContainer>
          <FormContainer>
             Nome do Comprador:
-            <input
-               placeholder="Digite seu nome..."
-               onChange={(e) => {
-                  ticket.name = e.target.value
-                  setTicket(ticket)
-               }}
-            />
-            CPF do Comprador:
-            <input
-               minLength="11"
-               maxLength="11"
-               placeholder="Digite seu CPF..."
-               onChange={(e) => {
-                  ticket.cpf = e.target.value
-                  setTicket(ticket)
-               }}
-            />
-            
-               <button
-                  onClick={() => {
+            <form
+               onSubmit={() => {
+                  event.preventDefault()
+                  if (arrClicked.length === 0) {
+                     alert('Selecione, no mínimo, 1 assento.')
+                  } else {
                      ticket.ids = arrClicked
                      setTicket(ticket)
-                     navigate('/sucesso', {state: {ticket, sessionID}})
+                     navigate('/sucesso', { state: { ticket, sessionID } })
+                  }
+               }}
+            >
+               <input
+                  required
+                  placeholder="Digite seu nome..."
+                  onChange={(e) => {
+                     ticket.name = e.target.value
+                     setTicket(ticket)
                   }}
-               >
-                  Reservar Assento(s)
-               </button>
-            
+               />
+               CPF do Comprador:
+               <input
+                  required
+                  minLength="11"
+                  maxLength="11"
+                  placeholder="Digite seu CPF..."
+                  onChange={(e) => {
+                     ticket.cpf = e.target.value
+                     setTicket(ticket)
+                  }}
+               />
+               <input id="button" type="submit" value="Reservar Assento(s)" />
+            </form>
          </FormContainer>
          <FooterContainer>
             <div>
@@ -143,7 +150,7 @@ const FormContainer = styled.div`
    align-items: flex-start;
    margin: 20px 0;
    font-size: 18px;
-   button {
+   #button {
       align-self: center;
    }
    input {

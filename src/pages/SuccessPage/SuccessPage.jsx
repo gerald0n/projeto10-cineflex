@@ -7,7 +7,6 @@ export default function SuccessPage() {
    const navigate = useNavigate()
    const {ticket, sessionID} = useLocation().state;
    const [session, setSession] = useState([])
-   console.log(ticket)
 
    const seatList_URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${sessionID}/seats`
 
