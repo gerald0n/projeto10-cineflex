@@ -27,12 +27,10 @@ export default function SeatsPage() {
       if (seat.isAvailable) {
          if (!arrClicked.includes(seat.name)) {
             setArrClicked([...arrClicked, seat.name])
-         
          } else {
             const copyArr = [...arrClicked]
             copyArr.splice(arrClicked.indexOf(seat.name), 1)
             setArrClicked(copyArr)
-            
          }
       } else {
          alert('Esse assento não está disponível')
@@ -47,6 +45,7 @@ export default function SeatsPage() {
                seats.map((seat, index) => {
                   return (
                      <SeatItem
+                        data-test="seat"
                         key={seat.name}
                         clicked={arrClicked.includes(seat.name)}
                         status={seat.isAvailable}
@@ -86,6 +85,7 @@ export default function SeatsPage() {
                }}
             >
                <input
+                  data-test="client-name"
                   required
                   placeholder="Digite seu nome..."
                   onChange={(e) => {
@@ -94,7 +94,9 @@ export default function SeatsPage() {
                   }}
                />
                CPF do Comprador:
+              
                <input
+                  data-test="client-cpf"
                   required
                   minLength="11"
                   maxLength="11"
@@ -104,10 +106,12 @@ export default function SeatsPage() {
                      setTicket(ticket)
                   }}
                />
-               <input id="button" type="submit" value="Reservar Assento(s)" />
+               <button 
+               data-test="book-seat-btn"
+               type='submit'>Reservar Assento(s)</button>
             </form>
          </FormContainer>
-         <FooterContainer>
+         <FooterContainer data-test="footer">
             <div>
                <img src={movie && movie.posterURL} alt="poster" />
             </div>

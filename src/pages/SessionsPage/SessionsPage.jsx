@@ -1,13 +1,14 @@
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 export default function SessionsPage() {
    const {idFilme : movieID} = useParams()
    const movie_URL = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${movieID}/showtimes`
    const [movie, setMovie] = useState([])
+   const navigate = useNavigate();
 
    useEffect(() => {
       axios.get(movie_URL).then((response) => {
@@ -23,22 +24,24 @@ export default function SessionsPage() {
          <div>
             {arrayOfAvailableDays && arrayOfAvailableDays.map((day) => {
                const { id, weekday, date, showtimes } = day
-               /* console.log(day) */
+               
                return (
-                  <SessionContainer key={id}>
+                  <SessionContainer data-test="movie-day" key={id}>
                      {weekday} - {date}
                      <ButtonsContainer>
                         {showtimes.map(time => (
-                        <Link key={time.id} to={`/assentos/${time.id}`}>
-                        <button>{time.name}</button>
-                        </Link>
+                        
+                        <button onClick={() => navigate(`/assentos/${time.id}`)} 
+                        key={time.id} 
+                        data-test="showtime">{time.name}</button>
+                        
                         ))}
                      </ButtonsContainer>
                   </SessionContainer>
                )
             })}
          </div>
-         <FooterContainer>
+         <FooterContainer data-test="footer">
             <div>
                <img
                   src={movie.posterURL}

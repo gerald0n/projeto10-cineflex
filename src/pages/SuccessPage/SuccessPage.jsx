@@ -22,7 +22,7 @@ export default function SuccessPage() {
             Pedido feito <br /> com sucesso!
          </h1>
 
-         <TextContainer>
+         <TextContainer data-test="movie-info">
             <strong>
                <p>Filme e sessão</p>
             </strong>
@@ -30,14 +30,14 @@ export default function SuccessPage() {
             <p>{day && `${day.weekday} - ${day.date}`}</p>
          </TextContainer>
 
-         <TextContainer>
+         <TextContainer data-test="seats-info">
             <strong>
                <p>Ingressos</p>
             </strong>
             {ticket.ids.map(seat => <p key={seat}>{`Assento ${seat}`}</p>)}
          </TextContainer>
 
-         <TextContainer>
+         <TextContainer data-test="client-info">
             <strong>
                <p>Comprador</p>
             </strong>
@@ -45,7 +45,9 @@ export default function SuccessPage() {
             <p>CPF: {ticket.cpf}</p>
          </TextContainer>
 
-         <button onClick={() => {
+         <button 
+         data-test="go-home-btn"
+         onClick={() => {
             navigate('/')
          }}>Voltar para Home</button>
       </PageContainer>
