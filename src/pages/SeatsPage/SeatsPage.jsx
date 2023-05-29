@@ -17,6 +17,8 @@ export default function SeatsPage() {
       cpf: ''
    })
 
+   const {nameUser, cpfUser} = ticket;
+
    useEffect(() => {
       axios.get(seatList_URL).then((response) => setSession(response.data))
    }, [])
@@ -25,11 +27,11 @@ export default function SeatsPage() {
 
    const selectSeat = (seat) => {
       if (seat.isAvailable) {
-         if (!arrClicked.includes(seat.name)) {
-            setArrClicked([...arrClicked, seat.name])
+         if (!arrClicked.includes(seat.id)) {
+            setArrClicked([...arrClicked, seat.id])
          } else {
             const copyArr = [...arrClicked]
-            copyArr.splice(arrClicked.indexOf(seat.name), 1)
+            copyArr.splice(arrClicked.indexOf(seat.id), 1)
             setArrClicked(copyArr)
          }
       } else {
@@ -46,8 +48,8 @@ export default function SeatsPage() {
                   return (
                      <SeatItem
                         data-test="seat"
-                        key={seat.name}
-                        clicked={arrClicked.includes(seat.name)}
+                        key={seat.id}
+                        clicked={arrClicked.includes(seat.id)}
                         status={seat.isAvailable}
                         onClick={() => selectSeat(seat, index)}
                      >
@@ -80,14 +82,23 @@ export default function SeatsPage() {
                   } else {
                      ticket.ids = arrClicked
                      setTicket(ticket)
-                     navigate('/sucesso', { state: { ticket, sessionID } })
+                     console.log(ticket)
+                     /* axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', ticket)
+                     .then(response => {
+                        if(response.status === 200) {
+                           navigate('/sucesso', { state: { ticket, sessionID } })
+                        }
+                     }) */
+                     
                   }
                }}
             >
                <input
+               type='text'
                   data-test="client-name"
                   required
                   placeholder="Digite seu nome..."
+                  value={nameUser}
                   onChange={(e) => {
                      ticket.name = e.target.value
                      setTicket(ticket)
@@ -96,6 +107,8 @@ export default function SeatsPage() {
                CPF do Comprador:
               
                <input
+               value={cpfUser}
+                  type='number_format'
                   data-test="client-cpf"
                   required
                   minLength="11"
