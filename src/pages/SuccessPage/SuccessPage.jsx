@@ -14,8 +14,8 @@ export default function SuccessPage() {
       axios.get(seatList_URL).then((response) => setSession(response.data))
    }, [])
 
-   const { day, movie } = session
-
+   const { day, movie, name } = session
+   
    return (
       <PageContainer>
          <h1>
@@ -27,7 +27,7 @@ export default function SuccessPage() {
                <p>Filme e sessão</p>
             </strong>
             <p>{movie && movie.title}</p>
-            <p>{day && `${day.weekday} - ${day.date}`}</p>
+            <p>{day && `${day.date} - ${name}`}</p>
          </TextContainer>
 
          <TextContainer data-test="seats-info">
