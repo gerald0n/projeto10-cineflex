@@ -1,22 +1,21 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-export default function SuccessPage({sessionID}) {
-   const seatList_URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${sessionID}/seats`
+export default function SuccessPage() {
+   const navigate = useNavigate()
+   const {ticket, sessionID} = useLocation().state;
    const [session, setSession] = useState([])
+   console.log(ticket)
 
-   const ticket = {
-      ids: ['10', '2003'],
-      name: 'Geraldo Gomes',
-      cpf: '0346533386'
-   }
+   const seatList_URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${sessionID}/seats`
 
    useEffect(() => {
       axios.get(seatList_URL).then((response) => setSession(response.data))
    }, [])
 
-   const { id, name, day, movie, seats } = session
+   const { day, movie } = session
 
    return (
       <PageContainer>
@@ -47,7 +46,9 @@ export default function SuccessPage({sessionID}) {
             <p>CPF: {ticket.cpf}</p>
          </TextContainer>
 
-         <button>Voltar para Home</button>
+         <button onClick={() => {
+            navigate('/')
+         }}>Voltar para Home</button>
       </PageContainer>
    )
 }

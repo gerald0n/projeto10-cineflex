@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-export default function SessionsPage({ movieID }) {
+export default function SessionsPage() {
+   const {idFilme : movieID} = useParams()
    const movie_URL = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${movieID}/showtimes`
    const [movie, setMovie] = useState([])
 
@@ -26,7 +28,11 @@ export default function SessionsPage({ movieID }) {
                   <SessionContainer key={id}>
                      {weekday} - {date}
                      <ButtonsContainer>
-                        {showtimes.map(time => (<button key={time.id}>{time.name}</button>))}
+                        {showtimes.map(time => (
+                        <Link key={time.id} to={`/assentos/${time.id}`}>
+                        <button>{time.name}</button>
+                        </Link>
+                        ))}
                      </ButtonsContainer>
                   </SessionContainer>
                )

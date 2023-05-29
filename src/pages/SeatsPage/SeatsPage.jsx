@@ -1,9 +1,12 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
-export default function SeatsPage({ sessionID }) {
+export default function SeatsPage() {
+   const { idSessao: sessionID } = useParams()
+   const navigate = useNavigate()
    const seatList_URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${sessionID}/seats`
    const [session, setSession] = useState([])
    const [arrClicked, setArrClicked] = useState([])
@@ -20,7 +23,7 @@ export default function SeatsPage({ sessionID }) {
 
    const { id, name, day, movie, seats } = session
 
-   const selectSeat = (seat, index) => {
+   const selectSeat = (seat) => {
       if (seat.isAvailable) {
          if (!arrClicked.includes(seat.name)) {
             setArrClicked([...arrClicked, seat.name])
@@ -29,6 +32,8 @@ export default function SeatsPage({ sessionID }) {
             copyArr.splice(arrClicked.indexOf(seat.name), 1)
             setArrClicked(copyArr)
          }
+      } else {
+         alert('Esse assento não está disponível')
       }
    }
 
@@ -83,14 +88,17 @@ export default function SeatsPage({ sessionID }) {
                   setTicket(ticket)
                }}
             />
-            <button
-               onClick={() => {
-                  ticket.ids = arrClicked
-                  setTicket(ticket)
-               }}
-            >
-               Reservar Assento(s)
-            </button>
+            
+               <button
+                  onClick={() => {
+                     ticket.ids = arrClicked
+                     setTicket(ticket)
+                     navigate('/sucesso', {state: {ticket, sessionID}})
+                  }}
+               >
+                  Reservar Assento(s)
+               </button>
+            
          </FormContainer>
          <FooterContainer>
             <div>
